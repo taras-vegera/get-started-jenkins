@@ -13,12 +13,25 @@ Task("Clean")
     CleanDirectory($"{solutionPath}/bin/{configuration}");
 });
 
+// Task("NuGet-Restore")
+//     .IsDependentOn("Clean")
+//     .Does(() => 
+// {
+//     NuGetRestore();
+// });
+
 Task("NuGet-Restore")
     .IsDependentOn("Clean")
     .Does(() => 
-{
-    NuGetRestore(solutionPath);
-});
+    {
+        var solutions = GetFiles("./**/*.sln");
+        // Restore all NuGet packages.
+        foreach(var solution in solutions)
+        {
+            Information("Restoring {0}", solution);
+            NuGetRestore(solution, new NuGetRestoreSettings { NoCache = true });
+        }
+    });
 
 Task("Build")
     .IsDependentOn("NuGet-Restore")
