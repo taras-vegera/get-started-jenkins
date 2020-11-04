@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-                bat 'powershell returnStatus: true, script: ".\\build.ps1"'
+                bat 'powershell -File build.ps1'
             }
         }
         stage('Test') {
