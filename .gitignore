@@ -32,7 +32,7 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
-tools/Cake
-
+tools/
+get-stated-jenkins/get-stated-jenkins/obj/
 # Visual Studio 2015
 .vs/
