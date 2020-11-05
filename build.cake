@@ -1,6 +1,7 @@
 var target = Argument("target", "Test");
 var configuration = Argument("configuration", "Release");
 var solutionPath = "./get-stated-jenkins/get-stated-jenkins.sln";
+var testPath = "./get-stated-jenkins/tests/tests.csproj";
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -13,6 +14,7 @@ Task("Clean")
     CleanDirectory($"{solutionPath}/bin/{configuration}");
 });
 
+
 Task("Build")
     .IsDependentOn("Clean")
     .Does(() =>
@@ -24,15 +26,20 @@ Task("Build")
 });
 
 Task("Test")
-    .IsDependentOn("Build")
+.IsDependentOn("Build")
     .Does(() =>
-{
-    DotNetCoreTest(solutionPath, new DotNetCoreTestSettings
     {
-        Configuration = configuration,
-        NoBuild = true,
+        DotNetCoreTest(
+            testPath,
+            new DotNetCoreTestSettings()
+            {
+                Configuration = configuration,
+                NoBuild = true,
+                NoRestore = true,
+                // ArgumentCustomization = args=>args.Append($"--logger trx;LogFileName=\"{testResultsFile}\"")
+            }
+        );
     });
-});
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
